@@ -14,11 +14,11 @@ function getB() {
         }, 1000);
     });
 }
-async function getC() {
+function getC() {
     console.log('getC(): resolved');
-    return 'c';
+    return new Promise((resolve, reject) => { resolve('c'); });
 }
-async function awaitAll() {
+function awaitAll() {
     console.log('getA()');
     let a = getA();
     console.log('getB()');
@@ -26,14 +26,16 @@ async function awaitAll() {
     console.log('getC()');
     let c = getC();
     console.log('await all');
-    let all = await Promise.all([a, b, c]);
-    console.log('have all');
-    console.log('a = ' + await a);
-    console.log('b = ' + await b);
-    console.log('c = ' + await c);
-    console.log('done');
+    return Promise.all([a, b, c]).then(all => {
+        let [a, b, c] = all;
+        console.log('have all');
+        console.log('a = ' + a);
+        console.log('b = ' + b);
+        console.log('c = ' + c);
+        console.log('done');
+    });
 }
-async function awaitEach() {
+function awaitEach() {
     console.log('getA()');
     let a = getA();
     console.log('getB()');
@@ -41,10 +43,16 @@ async function awaitEach() {
     console.log('getC()');
     let c = getC();
     console.log('have all');
-    console.log('a = ' + await a);
-    console.log('b = ' + await b);
-    console.log('c = ' + await c);
-    console.log('done');
+    return a.then(aValue => {
+        console.log('a = ' + aValue);
+        return b;
+    }).then(bValue => {
+        console.log('b = ' + bValue);
+        return c;
+    }).then(cValue => {
+        console.log('c = ' + cValue);
+        console.log('done');
+    });
 }
 (async () => {
     console.log('starting awaitAll...');
