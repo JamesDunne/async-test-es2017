@@ -14,11 +14,11 @@ function getB() {
         }, 1000);
     });
 }
-function getC() {
+async function getC() {
     console.log('getC(): resolved');
-    return new Promise((resolve, reject) => { resolve('c'); });
+    return 'c';
 }
-function awaitAll() {
+async function awaitAll() {
     console.log('getA()');
     let a = getA();
     console.log('getB()');
@@ -26,37 +26,28 @@ function awaitAll() {
     console.log('getC()');
     let c = getC();
     console.log('await all');
-    return Promise.all([a, b, c]).then(all => {
-        let [a, b, c] = all;
-        console.log('have all');
-        console.log('a = ' + a);
-        console.log('b = ' + b);
-        console.log('c = ' + c);
-        console.log('done');
-    });
+    let all = await Promise.all([a, b, c]);
+    console.log('have all');
+    console.log('a = ' + await a);
+    console.log('b = ' + await b);
+    console.log('c = ' + await c);
+    console.log('done');
 }
-function awaitEach() {
+async function awaitEach() {
     console.log('getA()');
     let a = getA();
     console.log('getB()');
     let b = getB();
     console.log('getC()');
     let c = getC();
-    return a.then(aValue => {
-        console.log('a = ' + aValue);
-        return b;
-    }).then(bValue => {
-        console.log('b = ' + bValue);
-        return c;
-    }).then(cValue => {
-        console.log('c = ' + cValue);
-        console.log('done');
-    });
+    console.log('a = ' + await a);
+    console.log('b = ' + await b);
+    console.log('c = ' + await c);
+    console.log('done');
 }
-console.log('\nstarting awaitAll...');
-awaitAll().then(() => {
+(async () => {
+    console.log('\nstarting awaitAll...');
+    await awaitAll();
     console.log('\nstarting awaitEach...');
-    awaitEach().then(() => {
-        console.log('\nall done');
-    });
-});
+    await awaitEach();
+})();

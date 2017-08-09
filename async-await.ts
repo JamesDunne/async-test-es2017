@@ -48,7 +48,6 @@ async function awaitEach() {
 	console.log('getC()');
 	let c = getC();
 
-	console.log('have all');
 	console.log('a = ' + await a);
 	console.log('b = ' + await b);
 	console.log('c = ' + await c);
@@ -56,8 +55,8 @@ async function awaitEach() {
 }
 
 (async () => {
-	console.log('starting awaitAll...');
+	console.log('\nstarting awaitAll...');
 	await awaitAll();
-	console.log('starting awaitEach...');
+	console.log('\nstarting awaitEach...');
 	await awaitEach();
 })();

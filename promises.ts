@@ -49,7 +49,6 @@ function awaitEach() {
 	console.log('getC()');
 	let c = getC();
 
-	console.log('have all');
 	return a.then(aValue => {
 		console.log('a = ' + aValue);
 		return b;
@@ -62,9 +61,10 @@ function awaitEach() {
 	});
 }
 
-(async () => {
-	console.log('starting awaitAll...');
-	await awaitAll();
-	console.log('starting awaitEach...');
-	await awaitEach();
-})();
+console.log('\nstarting awaitAll...');
+awaitAll().then(() => {
+	console.log('\nstarting awaitEach...');
+	awaitEach().then(() => {
+		console.log('\nall done');
+	});
+});
